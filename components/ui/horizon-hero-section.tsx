@@ -323,14 +323,15 @@ export const HorizonHeroSection = () => {
 
       // Update stars
       refs.stars.forEach((starField) => {
-        if (starField.material.uniforms) {
-          starField.material.uniforms.time.value = time
+        const material = starField.material as THREE.ShaderMaterial
+        if (material.uniforms) {
+          material.uniforms.time.value = time
         }
       })
 
       // Update nebula
-      if (refs.nebula && refs.nebula.material.uniforms) {
-        refs.nebula.material.uniforms.time.value = time * 0.5
+      if (refs.nebula && (refs.nebula.material as THREE.ShaderMaterial).uniforms) {
+        (refs.nebula.material as THREE.ShaderMaterial).uniforms.time.value = time * 0.5
       }
 
       // Smooth camera movement with easing
@@ -399,15 +400,27 @@ export const HorizonHeroSection = () => {
       // Dispose Three.js resources
       refs.stars.forEach((starField) => {
         starField.geometry.dispose()
-        starField.material.dispose()
+        if (starField.material instanceof THREE.Material) {
+          starField.material.dispose()
+        } else if (Array.isArray(starField.material)) {
+          starField.material.forEach(mat => mat.dispose())
+        }
       })
       refs.mountains.forEach((mountain) => {
         mountain.geometry.dispose()
-        mountain.material.dispose()
+        if (Array.isArray(mountain.material)) {
+          mountain.material.forEach(mat => mat.dispose())
+        } else {
+          mountain.material.dispose()
+        }
       })
       if (refs.nebula) {
         refs.nebula.geometry.dispose()
-        refs.nebula.material.dispose()
+        if (Array.isArray(refs.nebula.material)) {
+          refs.nebula.material.forEach(mat => mat.dispose())
+        } else {
+          refs.nebula.material.dispose()
+        }
       }
       if (refs.renderer) {
         refs.renderer.dispose()
