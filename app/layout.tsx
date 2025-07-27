@@ -4,8 +4,8 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
+  title: 'Clearview Pro',
+  description: 'Created with 💖 for business',
   generator: 'v0.dev',
 }
 
